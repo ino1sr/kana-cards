@@ -2,17 +2,36 @@ const path = require("path");
 const webpack = require("webpack");
 const env = process.env.NODE_ENV || 'development'
 const prod = env === 'production'
+const execSync = require("child_process").execSync;
+
+const hostname = execSync("hostname -f").toString().trim();
+
+const PORT = parseInt(process.env.PORT || 9000)
+
+const entry = {
+    main: "./src/main.js"
+  }
+
+const plugins = [
+    new webpack.NamedModulesPlugin(),
+  ]
+
+
+if (!prod) {
+  entry.main = ([
+      'webpack-dev-server/client?http://' + hostname + ':' + PORT.toString(),
+
+      'webpack/hot/dev-server'
+  ]).concat(entry.main)
+
+  plugins.unshift(new webpack.HotModuleReplacementPlugin())
+}
 
 module.exports = {
-  entry: {
-    main: "./src/main.js"
-  },
+  entry: entry,
   context: path.resolve(__dirname),
 
-  plugins: [
-    new webpack.NamedModulesPlugin(),
-  ],
-
+  plugins: plugins,
   output: {
     path: path.resolve(__dirname + '/_build/'),
     filename: '[name].js',
@@ -60,7 +79,7 @@ module.exports = {
     inline: false,
     hot: true,
     host: "0.0.0.0",
-    port: 9000,
+    port: PORT,
     disableHostCheck: true,
     stats: {
       colors: true
