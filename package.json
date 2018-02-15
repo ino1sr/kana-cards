@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "elm-webpack-loader": "^4.4.0",
+    "file-loader": "^1.1.6",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}
