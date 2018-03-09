@@ -1,29 +1,68 @@
 module Main exposing (..)
 
-import Html exposing (Html)
+import Html exposing (..)
+import Html.Events exposing (onClick)
 
 
-type Msg
-    = SomeMsg
+-- MODEL
 
 
 type alias Model =
-    Int
+    { kana : String
+    , kanaList : List String
+    }
+
+
+hiraganaList : List String
+hiraganaList =
+    [ "い", "う", "え", "お" ]
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( 0, Cmd.none )
+    ( Model "あ" hiraganaList, Cmd.none )
+
+
+
+-- UPDATE
+
+
+type Msg
+    = Next
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        Next ->
+            let
+                newKana =
+                    getNewKana model
+            in
+            ( { model | kana = newKana, kanaList = List.drop 1 model.kanaList }, Cmd.none )
+
+
+getNewKana : Model -> String
+getNewKana model =
+    model.kanaList
+        |> List.take 1
+        |> String.concat
+
+
+
+-- VIEW
 
 
 view : Model -> Html Msg
 view model =
-    Html.text "hello world from elm"
+    div []
+        [ div [] [ text model.kana ]
+        , button [ onClick Next ] [ text "Next" ]
+        ]
+
+
+
+-- SUBSCRIPTIONS
 
 
 subscriptions : Model -> Sub Msg
