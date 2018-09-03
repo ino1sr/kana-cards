@@ -79,8 +79,6 @@ module.exports = {
     hot: true,
     port: PORT,
     disableHostCheck: true,
-    stats: {
-      colors: true
-    },
+    stats: "minimal"
   },
 }
