@@ -1,7 +1,19 @@
-module Main exposing (..)
+module Main exposing
+    ( Model
+    , Msg(..)
+    , getNewKana
+    , hiraganaList
+    , init
+    , main
+    , subscriptions
+    , update
+    , view
+    )
 
+import Browser exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
+
 
 
 -- MODEL
@@ -18,8 +30,8 @@ hiraganaList =
     [ "い", "う", "え", "お" ]
 
 
-init : ( Model, Cmd Msg )
-init =
+init : () -> ( Model, Cmd Msg )
+init flags =
     ( Model "あ" hiraganaList, Cmd.none )
 
 
@@ -70,9 +82,9 @@ subscriptions model =
     Sub.none
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
+    Browser.element
         { init = init
         , update = update
         , subscriptions = subscriptions

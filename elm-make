@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Unbuffer is in the expect package
+
+if ! [ -x "$(command -v unbuffer)" ]; then
+  exec elm $@
+else
+  exec unbuffer elm $@
+fi

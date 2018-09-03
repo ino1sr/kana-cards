@@ -4,7 +4,6 @@ const env = process.env.NODE_ENV || 'development'
 const prod = env === 'production'
 const execSync = require("child_process").execSync;
 
-const hostname = execSync("hostname -f").toString().trim();
 
 const PORT = parseInt(process.env.PORT || 9000)
 
@@ -19,7 +18,7 @@ const plugins = [
 
 if (!prod) {
   entry.main = ([
-      'webpack-dev-server/client?http://' + hostname + ':' + PORT.toString(),
+      'webpack-dev-server/client?http://localhost:' + PORT.toString(),
 
       'webpack/hot/dev-server'
   ]).concat(entry.main)
@@ -30,7 +29,7 @@ if (!prod) {
 module.exports = {
   entry: entry,
   context: path.resolve(__dirname),
-
+  mode: (prod ? "production" : "development"),
   plugins: plugins,
   output: {
     path: path.resolve(__dirname + '/_build/'),
@@ -45,9 +44,9 @@ module.exports = {
         use: [{
           loader: 'elm-webpack-loader',
           options: {
+            pathToElm: "./elm-make",
             verbose: true,
-            warn: true,
-            debug: !prod
+            optimize: prod
           }
         }]
       },
@@ -78,7 +77,6 @@ module.exports = {
     contentBase: path.join(__dirname, "_build"),
     inline: false,
     hot: true,
-    host: "0.0.0.0",
     port: PORT,
     disableHostCheck: true,
     stats: {
